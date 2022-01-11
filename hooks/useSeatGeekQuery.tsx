@@ -48,7 +48,7 @@ const useSeatGeekQuery : useSeatGeekQueryTypes = (resource, params = {}) => {
         };
         fetchData();
         setLoading(false);
-    },[]);
+    },[params]);
     
     return {
         loading,

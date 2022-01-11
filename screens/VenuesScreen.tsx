@@ -1,16 +1,16 @@
+import { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import VenuesList from "../components/Venues";
+import VenuesList from "../components/VenuesList";
 import VenuesHeader from "../components/VenuesHeader";
 
 export default function VenuesScreen() {
-  return (
-	  <>
-	  <VenuesHeader/>
-	  <VenuesList/>
-	  </>
-  );
+
+	const [city, setCity] = useState('Savannah');
+
+	return (
+		<>
+		<VenuesHeader city={city} setCity={setCity} />
+		<VenuesList city={city}/>
+		</>
+	);
 }
-
-const styles = StyleSheet.create({
-
-});

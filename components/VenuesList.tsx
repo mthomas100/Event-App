@@ -2,19 +2,19 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { FlatList, Image, ImageBackground, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import tw from 'twrnc';
-import EditScreenInfo from '../components/EditScreenInfo';
-import { Text, View } from '../components/Themed';
+import EditScreenInfo from './EditScreenInfo';
+import { Text, View } from './Themed';
 import { images } from '../data/images';
 import useSeatGeekQuery from '../hooks/useSeatGeekQuery';
 import { Venues, VenuesParams } from '../types/Venues';
 
 
-export default function VenuesList() {
+export default function VenuesList({city} : {city: string}) {
 
 	//get image from assets/images/
 
 	const params : VenuesParams = {
-		city : 'savannah',
+		city,
 	}
 
 	const { loading, error, data } = useSeatGeekQuery('venues', params) as {loading: boolean, error: string, data : Venues[]}
@@ -41,7 +41,9 @@ export default function VenuesList() {
 		data={data}
 		renderItem={({ item }) => (
 			<ScrollView>
-			<TouchableOpacity style={[styles.venueContainer, tw`bg-gray-500`]}>
+			<TouchableOpacity 
+            style={[styles.venueContainer, tw`bg-gray-500`]}
+            >
 				<ImageBackground
 				style={styles.venueImage}
 				source={item.imageUrl}
