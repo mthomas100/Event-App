@@ -3,6 +3,26 @@ A React Native app designed to allow users to explore live events happening in a
 
 ![Mockup Image](./assets/gifs/readmegifLarge.gif)
 
+### Instructions for running project locally
+
+Prerequisites:
+
+- The [Expo CLI](https://docs.expo.dev/) must be installed on your system
+- You must have access to the [SeatGeek API](https://seatgeek.com/build)
+
+Steps:
+
+1) Clone Repository
+2) Install dependencies with `npm install` or `yarn`
+3) Create a `.env` file with the following Key/Value pairs:
+```
+REACT_APP_SEATGEEK_CLIENT_ID=<YOUR_SEATGEEK_CLIENT_ID>
+REACT_APP_SEATGEEK_CLIENT_SECRET=<YOUR_SEATGEEK_CLEINT_SECRET>
+```
+4) Run project with `yarn start` or `npm run start`
+5) Follow instructions given in the terminal by the Expo CLI to access the application 
+
+
 ### Current Features
 
 - This application pulls in event data from the [SeatGeek API](https://seatgeek.com/build). 
