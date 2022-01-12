@@ -3,6 +3,8 @@ A React Native app designed to allow users to explore live events happening in a
 
 ![Mockup Image](./assets/gifs/readmegifLarge.gif)
 
+🛑 *This project is a work in progress, but feel free to check out the progress made so far!* 
+
 ### Instructions for running project locally
 
 Prerequisites:
