@@ -8,7 +8,6 @@ export interface VenuesParams {
 }
 
 export interface Venues {
-	imageUrl: any;
     state: string;
     name_v2: string;
     postal_code: string;

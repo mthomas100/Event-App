@@ -17,7 +17,7 @@ const VenuesHeader:React.FC<VenuesHeaderProps> = ({ setCity, city }) => {
     }
 
     useEffect(() => {
-        console.log({isEditingCity})
+        // console.log({isEditingCity})
     }, [isEditingCity])
     return (
         <TouchableOpacity

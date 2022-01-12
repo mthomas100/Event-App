@@ -1,25 +1,21 @@
 import axios from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
-import { Events } from "../types/Events";
-import { Performers } from "../types/Performers";
-import { Venues } from "../types/Venues";
 
-type useSeatGeekQueryTypes = (
+export type useSeatGeekQueryTypes = (
     resource: 'venues' | 'performers' | 'events',
     params : object,
+    effectDeps?: any[],
     ) => {
     loading: boolean;
-    data: any;
     error: string;
+    data: unknown;
 };
 
 
-const useSeatGeekQuery : useSeatGeekQueryTypes = (resource, params = {}) => {
-    const [venues, setVenues] = useState<[] | Venues[]>([]);
-    const [performers, setPeformers] = useState<[] | Performers[]>([]);
-    const [events, setEvents] = useState<[] | Events[]>([]);
-
+const useSeatGeekQuery : useSeatGeekQueryTypes = (resource, params = {}, effectDeps = []) => {
+    console.log('useSeatGeekQuery', resource, params);
+    const [data, setData] = useState<unknown[]>([]);
     const [error, setError] = useState<string>('');
 	const [loading, setLoading] = useState<boolean>(true);
 
@@ -30,6 +26,7 @@ const useSeatGeekQuery : useSeatGeekQueryTypes = (resource, params = {}) => {
     }
 
     useEffect(() => {
+        console.log('useSeatGeekQuery useEffect', resource, params);
 		const fetchData = async () => {
 			try {
 				const { data } = await axios.get(`${endPointUrl}/${resource}`, {
@@ -38,22 +35,21 @@ const useSeatGeekQuery : useSeatGeekQueryTypes = (resource, params = {}) => {
                         ...params
                     }
 				});
-                if (resource === 'venues') { setVenues(data.venues)}
-                if (resource === 'performers') { setPeformers(data.performers)}
-                if (resource === 'events') { setEvents(data.events)}
+                setData(data[resource]);
             } catch (error) {
                 setError(error.message);
                 console.log(error);
+            } finally {
+                setLoading(false);
             }
         };
         fetchData();
-        setLoading(false);
-    },[params]);
+    },[...effectDeps]);
     
     return {
         loading,
-        data: resource === 'venues' ? venues : resource === 'performers' ? performers : events,
         error,
+        data
     }
 }
 

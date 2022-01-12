@@ -16,7 +16,7 @@ import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import TabOneScreen from '../screens/TabOneScreen';
 import VenuesScreen from '../screens/VenuesScreen';
-import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
+import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types/types';
 import LinkingConfiguration from './LinkingConfiguration';
 import Icon from 'react-native-vector-icons/Entypo'
 

@@ -1,52 +1,69 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { FlatList, Image, ImageBackground, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
-import tw from 'twrnc';
-import EditScreenInfo from './EditScreenInfo';
+import { Button, FlatList, Image, ImageBackground, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { Text, View } from './Themed';
-import { images } from '../data/images';
 import useSeatGeekQuery from '../hooks/useSeatGeekQuery';
-import { Venues, VenuesParams } from '../types/Venues';
+import { Venues, VenuesParams } from '../types/venues';
+import { MetaParams } from '../types/meta';
+import Loading from './Loading';
+import Error from './Error';
+import { getRandomColor } from '../utils/getRandomColor';
 
 
 export default function VenuesList({city} : {city: string}) {
-
-	//get image from assets/images/
-
-	const params : VenuesParams = {
-		city,
-	}
-
-	const { loading, error, data } = useSeatGeekQuery('venues', params) as {loading: boolean, error: string, data : Venues[]}
-
-	if (loading) return (
-		<View style={tw`flex-1 flex justify-center items-center`}>
-			<Text>Loading...</Text>
-		</View>
-	)
+	type VenuesData = Venues & {backgroundColor : string};
 	
-	if (error) return (
-		<View style={tw`flex-1 flex justify-center items-center`}>
-			<Text>Error</Text>
-		</View>
-	)
+	const [page, setPage] = useState<number>(1);
+	const [venuesData, setVenuesData] = useState<VenuesData[]>([]);
+	
 
-	data.map((item, i) => item.imageUrl = images[i]);
+	// This hook should be called each time the params change ✅
+	// Each time it is called, its data should be stored 
+	// Upon each new call the new data should be appended to the existing data
+
+	const metaParams : MetaParams = { page }
+	const venuesParams : VenuesParams = { city };
+	const { loading, error, data } = useSeatGeekQuery('venues', {...metaParams, ...venuesParams}, [city, page]) as ReturnType<typeof useSeatGeekQuery> & {data: VenuesData[]};
+
+	useEffect(() => {
+		// If city is changed, reset venuesData to empty array and page to 1
+		setVenuesData([]);
+		setPage(1);
+	},[city])
+
+	useEffect(() => {
+		// If new data is detected (i.e. page is incremented or city is changed), append incoming data to venuesData array
+		const incomingData = data.map(venue => ({
+			...venue,
+			backgroundColor: getRandomColor(0.5)
+		}))
+		setVenuesData(prev => [...prev, ...incomingData]);
+	},[data])
+
+	useEffect(() => {
+		// Effected placed for logging purposes only
+		console.log('venues data change', venuesData);
+	}, [venuesData])
+
+	if (loading) return <Loading />;
+	if (error) return <Error />;
 	
 	return (
 		<>
-
-		
+		<Button title='get random color' onPress={() => getRandomColor(0.5)} />
 		<FlatList
-		data={data}
+		data={venuesData}
+		keyExtractor={(item) => item.id.toString()}
+		onEndReached={() => setPage(page + 1)}
+		onEndReachedThreshold={0.5}
 		renderItem={({ item }) => (
 			<ScrollView>
 			<TouchableOpacity 
-            style={[styles.venueContainer, tw`bg-gray-500`]}
+            style={[[styles.venueContainer, {backgroundColor: item.backgroundColor}]]}
             >
 				<ImageBackground
 				style={styles.venueImage}
-				source={item.imageUrl}
+				source={null}
 				resizeMode="cover"
 				>
 				<View style={[styles.venueImageOverlay]}>
