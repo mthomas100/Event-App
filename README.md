@@ -35,7 +35,7 @@ that takes the arguments of resource and params in order to query the API effect
 
 - Combining types for the API and the useSeatGeekQuery allows for rapid and type safe building of the application while maximizing the potential out of the SeatGeek API.
 
-- Infinite scroll (paginates through query after scrolling to the bottom of venue feed)
+- Infinite scroll (paginates through query after scrolling to the bottom of venue feed). *See logic for the implementation of this feature [here](https://github.com/mthomas100/Event-App/blob/master/components/VenuesList.tsx)*
 
 ### Future Features
 
