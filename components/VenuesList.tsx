@@ -41,7 +41,7 @@ export default function VenuesList({city} : {city: string}) {
 	},[data])
 
 	useEffect(() => {
-		// Effected placed for logging purposes only
+		// Effect placed for logging purposes only
 		console.log('venues data change', venuesData);
 	}, [venuesData])
 
@@ -50,7 +50,6 @@ export default function VenuesList({city} : {city: string}) {
 	
 	return (
 		<>
-		<Button title='get random color' onPress={() => getRandomColor(0.5)} />
 		<FlatList
 		data={venuesData}
 		keyExtractor={(item) => item.id.toString()}

@@ -22,9 +22,15 @@ const linking: LinkingOptions<RootStackParamList> = {
           },
           Venues: {
             screens: {
-              TabTwoScreen: 'venues',
+              VenuesScreen: 'venues',
             },
           },
+          Venue: {
+            screens: {
+              VenueScreen: 'venue',
+            },
+          },
+
         },
       },
       Modal: 'modal',

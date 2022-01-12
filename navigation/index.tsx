@@ -19,6 +19,7 @@ import VenuesScreen from '../screens/VenuesScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types/types';
 import LinkingConfiguration from './LinkingConfiguration';
 import Icon from 'react-native-vector-icons/Entypo'
+import VenueScreen from '../screens/VenueScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -38,14 +39,13 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
  */
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
+
 function RootNavigator() {
   return (
     <Stack.Navigator>
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
-      <Stack.Group screenOptions={{ presentation: 'modal' }}>
-        <Stack.Screen name="Modal" component={ModalScreen} />
-      </Stack.Group>
+      <Stack.Screen name="Venue" component={VenueScreen} options={{ title: 'Venue Screen!' }} />
     </Stack.Navigator>
   );
 }
@@ -61,7 +61,7 @@ function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="TabOne"
+      initialRouteName="Venues"
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint,
       }}>
