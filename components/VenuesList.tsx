@@ -45,21 +45,21 @@ const VenuesList: React.FC<VenuesListProps> = ({ city, navigation }) => {
 	
 	return (
 		<>
-		<FlatList
-		data={venuesData}
-		keyExtractor={(item) => item.id.toString()}
-		onEndReached={() => setPage(page + 1)}
-		onEndReachedThreshold={0.5}
-		renderItem={({ item : venue }) => (
-			<ScrollView>
-			<TouchableOpacity 
-			onPress={() => navigation.navigate('Venue', {venueId: venue.id})}
-            >
-				<VenueNameWithBackground venue={venue} />
-			</TouchableOpacity>
-			</ScrollView>
-		)}
-		/>
+			<FlatList
+			data={venuesData}
+			keyExtractor={(item) => item.id.toString()}
+			onEndReached={() => setPage(page + 1)}
+			onEndReachedThreshold={0.5}
+			renderItem={({ item : venue }) => (
+				<ScrollView>
+				<TouchableOpacity 
+				onPress={() => navigation.navigate('Venue', {venueId: venue.id})}
+				>
+					<VenueNameWithBackground venue={venue} />
+				</TouchableOpacity>
+				</ScrollView>
+			)}
+			/>
 		</>
 	);
 }
