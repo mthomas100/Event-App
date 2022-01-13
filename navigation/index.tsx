@@ -45,7 +45,7 @@ function RootNavigator() {
     <Stack.Navigator>
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
-      <Stack.Screen name="Venue" component={VenueScreen} options={{ title: 'Venue Screen!' }} />
+      <Stack.Screen name="Venue" component={VenueScreen} options={{ title: 'Venue Screen!',  }} />
     </Stack.Navigator>
   );
 }
@@ -66,7 +66,7 @@ function BottomTabNavigator() {
         tabBarActiveTintColor: Colors[colorScheme].tint,
       }}>
       <BottomTab.Screen
-        name="Venues"
+        name="Venues" 
         component={VenuesScreen}
         options={{
           title: 'Venues',
@@ -74,6 +74,15 @@ function BottomTabNavigator() {
           headerShown: false,
         }}
       />
+      {/* <BottomTab.Screen
+        name="Venue"
+        component={VenueScreen}
+        options={{
+          title: 'Venue',
+          tabBarIcon: ({ color }) => <FontAwesome name="map" color='green' size={25} />,
+          headerShown: false,
+        }}
+      /> */}
     </BottomTab.Navigator>
   );
 }

@@ -6,6 +6,7 @@
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Venues } from './venues';
 
 declare global {
   namespace ReactNavigation {
@@ -20,7 +21,7 @@ export type RootStackParamList = {
   Modal: undefined;
   NotFound: undefined;
   Venue: {
-    testParamKey: string;
+    venueId: number,
   };
 };
 
@@ -38,3 +39,7 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> = Composit
   BottomTabScreenProps<RootTabParamList, Screen>,
   NativeStackScreenProps<RootStackParamList>
 >;
+
+//CUSTOM TYPES
+
+export type VenuesData = Venues & {backgroundColor : string};
