@@ -33,15 +33,13 @@ In order to give myself the opportuntiy to explore the API's full potential I ob
 - I created a custom hook called [useSeatGeekQuery](https://github.com/mthomas100/Event-App/blob/master/hooks/useSeatGeekQuery.tsx) 
 that takes the arguments of resource and params in order to query the API effectively. 
 
-- Combining types for the API and the useSeatGeekQuery will allow for rapid and type safe building of the application while maximizing the potential out of the SeatGeek API.
+- Combining types for the API and the useSeatGeekQuery allows for rapid and type safe building of the application while maximizing the potential out of the SeatGeek API.
+
+- Infinite scroll (paginates through query after scrolling to the bottom of venue feed). *See logic for the implementation of this feature [here](https://github.com/mthomas100/Event-App/blob/master/components/VenuesList.tsx)*
 
 ### Future Features
 
 - I plan to create a page for each venue. When it is clicked on, the user of the application will be able to browse events that are scheduled to happen at that venue. 
 Each event in turn have its own page with information about the entertainer that is to play and a link to buy tickets for that event. 
-
-- At present a few pictures downloaded from unsplash are being used in order to build an MVP of the app. It would be of interest to find a way to present actual pictures of the venues rather than these stock photos.
-
-- Presently only the first 10 results from the SeatGeek API query appear when searching for venues in a new city. Ideally upon scrolling to the end of a set of results, the next batch of 10 results would load and then be displayed below the previous 10 results and so on. In this way a user would be able to scroll through all of the venues in their city in an intuitive fashion.
 
 - More tabs that utilize features of the SeatGeek API in addition to a "Home" tab. 
