@@ -40,6 +40,6 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> = Composit
   NativeStackScreenProps<RootStackParamList>
 >;
 
-//CUSTOM TYPES
+//CUSTOM PROP TYPES
 
 export type VenuesData = Venues & {backgroundColor : string};

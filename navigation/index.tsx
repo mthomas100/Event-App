@@ -20,16 +20,20 @@ import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../typ
 import LinkingConfiguration from './LinkingConfiguration';
 import Icon from 'react-native-vector-icons/Entypo'
 import VenueScreen from '../screens/VenueScreen';
+import { Provider } from 'react-redux'
+import store from '../redux'
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
-    <NavigationContainer
-      linking={LinkingConfiguration}
-      theme={DarkTheme}
-      /*theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme} */
-      >
-      <RootNavigator />
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer
+        linking={LinkingConfiguration}
+        theme={DarkTheme}
+        /*theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme} */
+        >
+        <RootNavigator />
+      </NavigationContainer>
+    </Provider>
   );
 }
 

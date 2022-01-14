@@ -10,6 +10,7 @@ import { getRandomColor } from '../utils/getRandomColor';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList, VenuesData } from '../types/types';
 import VenueNameWithBackground from './common/VenueNameWithBackground';
+import Counter from './examples/Counter';
 
 type VenuesListProps = {
 	city : string;
@@ -45,6 +46,7 @@ const VenuesList: React.FC<VenuesListProps> = ({ city, navigation }) => {
 	
 	return (
 		<>
+			<Counter/>
 			<FlatList
 			data={venuesData}
 			keyExtractor={(item) => item.id.toString()}
