@@ -12,6 +12,7 @@ const dateConverter = (date: string) => {
 }
 
 const VenueEvent:React.FC <EventProps> = ({ event }) => {
+    console.log('venue event', event);
     return (
         <View style={styles.wrapperForMargin}>
             <View style={[styles.container]}>

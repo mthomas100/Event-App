@@ -12,6 +12,12 @@ type VenueEventsListProps = {
 }
 
 const VenueEventsList:React.FC<VenueEventsListProps> = ({ venue }) => {
+    //TODO:
+    //1)  Load more events when scroll to bottom
+    //1b) As this pattern has shown up twice now,
+    //    consider a method to write this logic only once and use when needed
+    //2)  Handle situation in which there are no events for a venue
+    //2b) Consider only showing venues which have events
 
     const eventsParams : EventsParams = {
         "venue.id": venue.id,
