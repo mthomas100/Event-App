@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-import {  FlatList, ImageBackground, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
-import { Text, View } from './Themed';
+import {  FlatList, ScrollView , TouchableOpacity } from 'react-native';
 import useSeatGeekQuery from '../hooks/useSeatGeekQuery';
-import { Venues, VenuesParams } from '../types/venues';
+import { VenuesParams } from '../types/venues';
 import { MetaParams } from '../types/meta';
 import Loading from './Loading';
 import Error from './Error';
@@ -10,7 +9,8 @@ import { getRandomColor } from '../utils/getRandomColor';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList, VenuesData } from '../types/types';
 import VenueNameWithBackground from './common/VenueNameWithBackground';
-import Counter from './examples/Counter';
+import { useReduxDispatch, useReduxSelector } from '../redux';
+import { setVenue } from '../redux/slices/venue';
 
 type VenuesListProps = {
 	city : string;
@@ -18,9 +18,15 @@ type VenuesListProps = {
 };
 
 const VenuesList: React.FC<VenuesListProps> = ({ city, navigation }) => {
-	
 	const [page, setPage] = useState<number>(1);
 	const [venuesData, setVenuesData] = useState<VenuesData[]>([]);
+
+    const dispatch = useReduxDispatch()
+
+	const handleVenuePress = (venue: VenuesData) => {
+		dispatch(setVenue(venue));
+		navigation.navigate('Venue', {venueId: venue.id});
+	}
 	
 	const metaParams : MetaParams = { page }
 	const venuesParams : VenuesParams = { city };
@@ -42,12 +48,10 @@ const VenuesList: React.FC<VenuesListProps> = ({ city, navigation }) => {
 	},[data])
 
 	if (loading) return <Loading />;
-	if (error) return <Error />;
+	if (error) return <Error error={error} />;
 	
 	return (
-		<>
-			<Counter/>
-			<FlatList
+		<FlatList
 			data={venuesData}
 			keyExtractor={(item) => item.id.toString()}
 			onEndReached={() => setPage(page + 1)}
@@ -55,17 +59,14 @@ const VenuesList: React.FC<VenuesListProps> = ({ city, navigation }) => {
 			renderItem={({ item : venue }) => (
 				<ScrollView>
 				<TouchableOpacity 
-				onPress={() => navigation.navigate('Venue', {venueId: venue.id})}
+				onPress={() => handleVenuePress(venue)}
 				>
 					<VenueNameWithBackground venue={venue} />
 				</TouchableOpacity>
 				</ScrollView>
 			)}
-			/>
-		</>
+		/>
 	);
 }
-
-const styles = StyleSheet.create({});
 
 export default VenuesList;

@@ -1,25 +1,23 @@
 import { RouteProp } from '@react-navigation/native';
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import VenueNameWithBackground from '../components/common/VenueNameWithBackground';
-import { RootStackParamList } from '../types/types';
+import VenueEventsList from '../components/VenueEventsList';
+import { useReduxSelector } from '../redux';
+import { RootStackParamList, VenuesData } from '../types/types';
 
 type VenueScreenProps = {
     route: RouteProp<RootStackParamList, 'Venue'>;
 };
 
 const VenueScreen: React.FC<VenueScreenProps> = ({ route }) => {
-    //TODO: Configure redux in order to get venue data from venues list upon click
-    // OR set up API call to https://api.seatgeek.com/2/venues/:id
-    // VenueNameWithBackground commented out until this data can be retrieved
-    // Must Take into acocunt that the background color property was generated within the app 
+    const venue = useReduxSelector(state => state.venue) as VenuesData;
+    // if (!venue.id) <Error />
     
     return (
         <View style={styles.container}>
-            {/* <VenueNameWithBackground venue={venue} /> */}
-            <Text style={styles.textStyles}>Venue Screen</Text>
-            <Text style={styles.textStyles}>Venue ID: {route.params?.venueId}</Text>
-            <Text style={[styles.textStyles, {fontSize: 12}]}>Retrieve venue data using above ID</Text>
+            <VenueNameWithBackground venue={venue} />
+            <VenueEventsList venue={venue} />
         </View>
     )
 }
@@ -31,12 +29,5 @@ const styles = StyleSheet.create({
         flex : 1,
         justifyContent : 'flex-start',
         alignItems : 'center',
-        paddingTop: 40,
-        // backgroundColor : 'pink',
     },
-    textStyles : {
-        color: 'white',
-        fontSize: 20,
-        paddingTop: 10,
-    }
 })

@@ -32,6 +32,7 @@
     "expo-web-browser": "~10.1.0",
     "global": "^4.4.0",
     "react": "17.0.1",
+    "react-devtools-core": "4.22",
     "react-dom": "17.0.1",
     "react-icons": "^4.3.1",
     "react-native": "0.64.3",

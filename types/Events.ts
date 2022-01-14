@@ -1,27 +1,19 @@
 export interface EventsParams {
-  performers?: {
-    slug?: string;
-    id?: number;
-  };
-  venue?: {
-    city?: string;
-    id?: number;
-    state?: string;
-  };
-  datetime_utc?: string | {
-    gte?: string;
-    lte?: string;
-  };
+  'performers.slug'?: string;
+  'performers.id'?: number;
+  'venue.id'?: number;
+  'venue.city'?: string;
+  'venue.state'?: string;
+  'datetime_local.gte'?: string;
+  'datetime_local.lte'?: string;
   query?: string;
   id?: number;
-  taxonomies?: {
-    name?: string;
-    id?: number;
-    parent_id?: number;
-  };
+  'taxonomies.id'?: number;
+  'taxonomies.parent_id'?: number;
+  'taxonomies.name'?: string;
 }
 
-
+//TODO: Rename to Event
 export interface Events {
     type: string;
     id: number;

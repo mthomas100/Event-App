@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
 
@@ -8,7 +8,7 @@ export type useSeatGeekQueryTypes = (
     effectDeps?: any[],
     ) => {
     loading: boolean;
-    error: string;
+    error: AxiosError | null;
     data: unknown;
 };
 
@@ -16,7 +16,7 @@ export type useSeatGeekQueryTypes = (
 const useSeatGeekQuery : useSeatGeekQueryTypes = (resource, params = {}, effectDeps = []) => {
     console.log('useSeatGeekQuery', resource, params);
     const [data, setData] = useState<unknown[]>([]);
-    const [error, setError] = useState<string>('');
+    const [error, setError] = useState<AxiosError | null>(null);
 	const [loading, setLoading] = useState<boolean>(true);
 
     const endPointUrl = 'https://api.seatgeek.com/2';
@@ -28,7 +28,7 @@ const useSeatGeekQuery : useSeatGeekQueryTypes = (resource, params = {}, effectD
     useEffect(() => {
         console.log('useSeatGeekQuery useEffect', resource, params);
 		const fetchData = async () => {
-			try {
+			try { 
 				const { data } = await axios.get(`${endPointUrl}/${resource}`, {
 					params : {
                         ...authParams,
@@ -37,8 +37,10 @@ const useSeatGeekQuery : useSeatGeekQueryTypes = (resource, params = {}, effectD
 				});
                 setData(data[resource]);
             } catch (error) {
-                setError(error.message);
-                console.log(error);
+                // TODO: check if error is AxiosError, then handle
+                const err = error as AxiosError;
+                setError(err);
+                console.log(err);
             } finally {
                 setLoading(false);
             }

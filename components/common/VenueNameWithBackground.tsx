@@ -21,10 +21,6 @@ const styles = StyleSheet.create({
 		overflow: 'hidden',
 		alignSelf: 'center',
 	},
-    venueImage : {
-		flex: 1,
-		width: '100%',
-	},
 	venueImageOverlay : {
 		flex: 1,
 		width: '100%',

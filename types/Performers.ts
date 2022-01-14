@@ -2,20 +2,14 @@ export interface PerformersParams {
   slug?: string;
   query?: string;
   id?: number;
-  taxonomies ?: {
-    name?: string;
-    id?: number;
-    parent_id?: number;
-  }
-  genres?: {
-    slug?: string;
-    primary?: {
-      slug?: string;
-    }
-  }
+  'taxonomies.name'? : string;
+  'taxonomies.id'? : number;
+  'taxonomies.parent_id'? : number;
+  'genres.slug'? : string;
+  'genres.primary.slug'? : string;
 }
 
-
+//TODO: Rename to Performer
 export interface Performers {
     type: string;
     name: string;

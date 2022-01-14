@@ -7,6 +7,7 @@ export interface VenuesParams {
   id?: number;
 }
 
+//TODO: Rename to Venue
 export interface Venues {
     state: string;
     name_v2: string;
