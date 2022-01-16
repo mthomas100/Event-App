@@ -20,6 +20,7 @@ type VenuesListProps = {
 const VenuesList: React.FC<VenuesListProps> = ({ city, navigation }) => {
 	const [page, setPage] = useState<number>(1);
 	const [venuesData, setVenuesData] = useState<VenuesData[]>([]);
+	const [paginationMax, setPaginationMax] = useState<number>(0);
 
     const dispatch = useReduxDispatch()
 
@@ -27,13 +28,20 @@ const VenuesList: React.FC<VenuesListProps> = ({ city, navigation }) => {
 		dispatch(setVenue(venue));
 		navigation.navigate('Venue', {venueId: venue.id});
 	}
-	
-	const metaParams : MetaParams = { page }
-	const venuesParams : VenuesParams = { city };
-	const { loading, error, data } = useSeatGeekQuery('venues', {...metaParams, ...venuesParams}, [city, page]) as ReturnType<typeof useSeatGeekQuery> & {data: VenuesData[]};
 
+	const handleEndReached = () => {
+		if (page < paginationMax) {
+			setPage(page + 1);
+		}
+	}
+	
+	const metaParams : MetaParams = { page, per_page: 50 };
+	const venuesParams : VenuesParams = { city };
+	const { loading, error, data, metaData } = useSeatGeekQuery('venues', {...metaParams, ...venuesParams}, [city, page]) as ReturnType<typeof useSeatGeekQuery> & {data: VenuesData[]};
 	// If city is changed, reset venuesData to empty array and page to 1
 	useEffect(() => {
+		// TODO: When a city has changed, take note of the total number of venues
+		// and only allow pagination to occur when page * per_page < total number of venues
 		setVenuesData([]);
 		setPage(1);
 	},[city])
@@ -44,8 +52,21 @@ const VenuesList: React.FC<VenuesListProps> = ({ city, navigation }) => {
 			...venue,
 			backgroundColor: getRandomColor(0.5)
 		}))
-		setVenuesData(prev => [...prev, ...incomingData]);
+		const venuesWithEvents = incomingData.filter(venue => venue.has_upcoming_events === true);
+		setVenuesData(prev => [...prev, ...venuesWithEvents]);
 	},[data])
+
+	useEffect(() => {
+		if (metaData.total) {
+			setPaginationMax(Math.ceil(metaData.total / metaData.per_page));
+		}
+	}, [metaData])
+
+	useEffect(() => {
+		console.log('VENUESLISTRENDER');
+	})
+
+	//TODO: FIX ISSUE: PAGINATING ISN'T CONSIDENT BECAUSE WE'RE ELIMINATING DATA WHERE HAS_UPCOMING_EVENTS IS FALSE
 
 	if (loading) return <Loading />;
 	if (error) return <Error error={error} />;
@@ -54,7 +75,7 @@ const VenuesList: React.FC<VenuesListProps> = ({ city, navigation }) => {
 		<FlatList
 			data={venuesData}
 			keyExtractor={(item) => item.id.toString()}
-			onEndReached={() => setPage(page + 1)}
+			onEndReached={handleEndReached} // only allow page changing if the venues array 
 			onEndReachedThreshold={0.5}
 			renderItem={({ item : venue }) => (
 				<ScrollView>

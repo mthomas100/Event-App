@@ -1,6 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
+import { Meta } from "../types/meta";
 
 export type useSeatGeekQueryTypes = (
     resource: 'venues' | 'performers' | 'events',
@@ -10,12 +11,14 @@ export type useSeatGeekQueryTypes = (
     loading: boolean;
     error: AxiosError | null;
     data: unknown;
+    metaData : Meta;
 };
 
 
 const useSeatGeekQuery : useSeatGeekQueryTypes = (resource, params = {}, effectDeps = []) => {
     console.log('useSeatGeekQuery', resource, params);
     const [data, setData] = useState<unknown[]>([]);
+    const [metaData, setMetaData] = useState<Meta>({} as Meta);
     const [error, setError] = useState<AxiosError | null>(null);
 	const [loading, setLoading] = useState<boolean>(true);
 
@@ -36,6 +39,7 @@ const useSeatGeekQuery : useSeatGeekQueryTypes = (resource, params = {}, effectD
                     }
 				});
                 setData(data[resource]);
+                setMetaData(data.meta);
             } catch (error) {
                 // TODO: check if error is AxiosError, then handle
                 const err = error as AxiosError;
@@ -51,7 +55,8 @@ const useSeatGeekQuery : useSeatGeekQueryTypes = (resource, params = {}, effectD
     return {
         loading,
         error,
-        data
+        data,
+        metaData
     }
 }
 
