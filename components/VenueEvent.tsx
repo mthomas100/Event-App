@@ -1,14 +1,10 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Events } from '../types/events'
+import { dateConverter } from '../utils/dateConverter'
 
 type EventProps = {
     event: Events;
-}
-
-const dateConverter = (date: string) => {
-    const dateObj = new Date(date);
-    return dateObj.toDateString();
 }
 
 const VenueEvent:React.FC <EventProps> = ({ event }) => {
