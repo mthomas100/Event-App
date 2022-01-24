@@ -11,6 +11,7 @@ import { RootStackParamList, VenuesData, VenuesParamList } from '../types/types'
 import VenueNameWithBackground from './common/VenueNameWithBackground';
 import { useReduxDispatch, useReduxSelector } from '../redux';
 import { setVenue } from '../redux/slices/venue';
+import { useMemo } from 'react';
 
 type VenuesListProps = {
 	city : string;
@@ -30,9 +31,14 @@ const VenuesList: React.FC<VenuesListProps> = ({ city, navigation }) => {
 		dispatch(setVenue(venue));
 		navigation.navigate('Venue', {venueId: venue.id});
 	}
+
+	const params = useMemo(() => ({
+		city,
+	}), [city]) as VenuesParams;
+
+	console.log(params);
 	
-	const venuesParams : VenuesParams = { city };
-	const { loading, error, data } = useSeatGeekQuery('venues', {...venuesParams}, [city]) as ReturnType<typeof useSeatGeekQuery> & {data: VenuesData[]};
+	const { loading, error, data } = useSeatGeekQuery('venues', params) as ReturnType<typeof useSeatGeekQuery> & {data: VenuesData[]};
 
 	// If new data is detected (i.e. page is incremented or city is changed), append incoming data to venuesData array
 	useEffect(() => {
