@@ -48,6 +48,7 @@ function TabOneNavigator() {
           headerStyle: styles.header,
           headerTitleStyle: styles.headerTitle,
           headerTintColor: Colors.light.white,
+          headerShown: false,
         }}
       >
         <VenuesStack.Screen

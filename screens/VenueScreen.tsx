@@ -1,13 +1,13 @@
 import { RouteProp } from '@react-navigation/native';
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { SafeAreaView, StyleSheet, View } from 'react-native'
 import VenueNameWithBackground from '../components/common/VenueNameWithBackground';
 import VenueEventsList from '../components/VenueEventsList';
 import { useReduxSelector } from '../redux';
-import { RootStackParamList, VenuesData } from '../types/types';
+import { RootStackParamList, VenuesData, VenuesParamList } from '../types/types';
 
 type VenueScreenProps = {
-    route: RouteProp<RootStackParamList, 'Venue'>;
+    route: RouteProp<VenuesParamList, 'Venue'>;
 };
 
 const VenueScreen: React.FC<VenueScreenProps> = ({ route }) => {
@@ -15,10 +15,10 @@ const VenueScreen: React.FC<VenueScreenProps> = ({ route }) => {
     // if (!venue.id) <Error />
     
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <VenueNameWithBackground venue={venue} />
             <VenueEventsList venue={venue} />
-        </View>
+        </SafeAreaView>
     )
 }
 
