@@ -67,6 +67,9 @@ const VenuesList: React.FC<VenuesListProps> = ({ city, navigation }) => {
 	})
 
 	//TODO: FIX ISSUE: PAGINATING ISN'T CONSIDENT BECAUSE WE'RE ELIMINATING DATA WHERE HAS_UPCOMING_EVENTS IS FALSE
+	// Proposed solution: Create custom metaData object that accounts for only venues with upcoming events
+	// Proposed solution: 
+	// Hacky solution: Dramatically increase events query per_page to get all events
 
 	if (loading) return <Loading />;
 	if (error) return <Error error={error} />;

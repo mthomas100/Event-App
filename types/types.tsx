@@ -15,14 +15,11 @@ declare global {
 }
 
 // GENERAL SCREENS
-// Undefined if there are no params
+
 export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
   Modal: undefined;
   NotFound: undefined;
-  Venue: {
-    venueId: number,
-  };
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<
@@ -32,7 +29,16 @@ export type RootStackScreenProps<Screen extends keyof RootStackParamList> = Nati
 
 // TABS
 export type RootTabParamList = {
-  Venues: undefined;
+  VenuesTab: undefined;
+};
+
+// VENUES STACK
+
+export type VenuesParamList = {
+  Venues : undefined;
+  Venue: {
+    venueId: number;
+  };
 };
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> = CompositeScreenProps<
