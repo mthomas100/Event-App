@@ -1,9 +1,11 @@
+import 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
-
+import { Provider } from 'react-redux';
+import store from './redux';
 
 
 export default function App() {
@@ -14,10 +16,12 @@ export default function App() {
     return null;
   } else {
     return (
+      <Provider store={store}>
       <SafeAreaProvider>
         <Navigation colorScheme={colorScheme} />
         <StatusBar />
       </SafeAreaProvider>
+      </Provider>
     );
   }
 }
