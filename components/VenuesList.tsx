@@ -7,46 +7,32 @@ import Loading from './Loading';
 import Error from './Error';
 import { getRandomColor } from '../utils/getRandomColor';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList, VenuesData } from '../types/types';
+import { RootStackParamList, VenuesData, VenuesParamList } from '../types/types';
 import VenueNameWithBackground from './common/VenueNameWithBackground';
 import { useReduxDispatch, useReduxSelector } from '../redux';
 import { setVenue } from '../redux/slices/venue';
 
-const PER_PAGE = 10;
-
 type VenuesListProps = {
 	city : string;
-	navigation: NativeStackNavigationProp<RootStackParamList>;
+	navigation: NativeStackNavigationProp<VenuesParamList>;
 };
 
 const VenuesList: React.FC<VenuesListProps> = ({ city, navigation }) => {
-	const [page, setPage] = useState<number>(1);
 	const [venuesData, setVenuesData] = useState<VenuesData[]>([]);
-	const [paginationMax, setPaginationMax] = useState<number>(0);
 
     const dispatch = useReduxDispatch()
+
+	const handleEndReached = () => {
+		console.log('handleEndReached');
+	}
 
 	const handleVenuePress = (venue: VenuesData) => {
 		dispatch(setVenue(venue));
 		navigation.navigate('Venue', {venueId: venue.id});
 	}
-
-	const handleEndReached = () => {
-		if (page < paginationMax) {
-			setPage(page + 1);
-		}
-	}
 	
-	const metaParams : MetaParams = { page, per_page: PER_PAGE };
 	const venuesParams : VenuesParams = { city };
-	const { loading, error, data, metaData } = useSeatGeekQuery('venues', {...metaParams, ...venuesParams}, [city, page]) as ReturnType<typeof useSeatGeekQuery> & {data: VenuesData[]};
-	// If city is changed, reset venuesData to empty array and page to 1
-	useEffect(() => {
-		// TODO: When a city has changed, take note of the total number of venues
-		// and only allow pagination to occur when page * per_page < total number of venues
-		setVenuesData([]);
-		setPage(1);
-	},[city])
+	const { loading, error, data } = useSeatGeekQuery('venues', {...venuesParams}, [city]) as ReturnType<typeof useSeatGeekQuery> & {data: VenuesData[]};
 
 	// If new data is detected (i.e. page is incremented or city is changed), append incoming data to venuesData array
 	useEffect(() => {
@@ -58,19 +44,9 @@ const VenuesList: React.FC<VenuesListProps> = ({ city, navigation }) => {
 	},[data])
 
 	useEffect(() => {
-		if (metaData.total) {
-			setPaginationMax(Math.ceil(metaData.total / metaData.per_page));
-		}
-	}, [metaData])
-
-	useEffect(() => {
-		console.log('VENUESLISTRENDER');
-	})
-
-	//TODO: FIX ISSUE: PAGINATING ISN'T CONSIDENT BECAUSE WE'RE ELIMINATING DATA WHERE HAS_UPCOMING_EVENTS IS FALSE
-	// Proposed solution: Create custom metaData object that accounts for only venues with upcoming events
-	// Proposed solution: 
-	// Hacky solution: Dramatically increase events query per_page to get all events
+		//If city changes, reset venuesData array
+		setVenuesData([]);
+	},[city])
 
 	if (loading) return <Loading />;
 	if (error) return <Error error={error} />;
