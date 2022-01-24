@@ -7,14 +7,14 @@ import Loading from './Loading';
 import Error from './Error';
 import { getRandomColor } from '../utils/getRandomColor';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList, VenuesData } from '../types/types';
+import { RootStackParamList, VenuesData, VenuesParamList } from '../types/types';
 import VenueNameWithBackground from './common/VenueNameWithBackground';
 import { useReduxDispatch, useReduxSelector } from '../redux';
 import { setVenue } from '../redux/slices/venue';
 
 type VenuesListProps = {
 	city : string;
-	navigation: NativeStackNavigationProp<RootStackParamList>;
+	navigation: NativeStackNavigationProp<VenuesParamList>;
 };
 
 const VenuesList: React.FC<VenuesListProps> = ({ city, navigation }) => {
