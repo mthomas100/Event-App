@@ -1,4 +1,4 @@
-import "react-native-gesture-handler";
+import 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useCachedResources from './hooks/useCachedResources';
@@ -6,8 +6,6 @@ import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
 import { Provider } from 'react-redux';
 import store from './redux';
-// import { GestureHandlerRootView } from 'react-native-gesture-handler';
-
 
 
 export default function App() {
@@ -19,12 +17,10 @@ export default function App() {
   } else {
     return (
       <Provider store={store}>
-        {/* <GestureHandlerRootView> */}
-          <SafeAreaProvider>
-            <Navigation colorScheme={colorScheme} />
-            <StatusBar />
-          </SafeAreaProvider>
-        {/* </GestureHandlerRootView> */}
+      <SafeAreaProvider>
+        <Navigation colorScheme={colorScheme} />
+        <StatusBar />
+      </SafeAreaProvider>
       </Provider>
     );
   }

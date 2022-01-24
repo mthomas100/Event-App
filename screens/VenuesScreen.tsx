@@ -10,7 +10,7 @@ type VenuesScreenProps = {
 
 const VenuesScreen:React.FC<VenuesScreenProps> = ({ navigation }) => {
 
-	const [city, setCity] = useState('Atlanta');
+	const [city, setCity] = useState('Savannah');
 
 	return (
 		<>

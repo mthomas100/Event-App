@@ -2,6 +2,7 @@ import axios, { AxiosError } from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
 import { Meta } from "../types/meta";
+import { VenuesData } from "../types/types";
 
 export type useSeatGeekQueryTypes = (
     resource: 'venues' | 'performers' | 'events',
@@ -38,6 +39,7 @@ const useSeatGeekQuery : useSeatGeekQueryTypes = (resource, params = {}, effectD
                         ...params
                     }
 				});
+
                 setData(data[resource]);
                 setMetaData(data.meta);
             } catch (error) {
@@ -51,6 +53,14 @@ const useSeatGeekQuery : useSeatGeekQueryTypes = (resource, params = {}, effectD
         };
         fetchData();
     },[...effectDeps]);
+
+    // useEffect(() => {
+    //     const incomingData = [] as VenuesData[];
+    //     if (resource === 'venues') {
+    //         const venuesWithEvents = incomingData.filter(venue => venue.has_upcoming_events === true);
+    //         setData(venuesWithEvents);
+    //     }
+    // }, [data]);
     
     return {
         loading,

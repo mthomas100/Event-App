@@ -7,14 +7,16 @@ import Loading from './Loading';
 import Error from './Error';
 import { getRandomColor } from '../utils/getRandomColor';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList, VenuesData, VenuesParamList } from '../types/types';
+import { RootStackParamList, VenuesData } from '../types/types';
 import VenueNameWithBackground from './common/VenueNameWithBackground';
 import { useReduxDispatch, useReduxSelector } from '../redux';
 import { setVenue } from '../redux/slices/venue';
 
+const PER_PAGE = 10;
+
 type VenuesListProps = {
 	city : string;
-	navigation: NativeStackNavigationProp<VenuesParamList>;
+	navigation: NativeStackNavigationProp<RootStackParamList>;
 };
 
 const VenuesList: React.FC<VenuesListProps> = ({ city, navigation }) => {
@@ -35,7 +37,7 @@ const VenuesList: React.FC<VenuesListProps> = ({ city, navigation }) => {
 		}
 	}
 	
-	const metaParams : MetaParams = { page, per_page: 50 };
+	const metaParams : MetaParams = { page, per_page: PER_PAGE };
 	const venuesParams : VenuesParams = { city };
 	const { loading, error, data, metaData } = useSeatGeekQuery('venues', {...metaParams, ...venuesParams}, [city, page]) as ReturnType<typeof useSeatGeekQuery> & {data: VenuesData[]};
 	// If city is changed, reset venuesData to empty array and page to 1
@@ -52,8 +54,7 @@ const VenuesList: React.FC<VenuesListProps> = ({ city, navigation }) => {
 			...venue,
 			backgroundColor: getRandomColor(0.5)
 		}))
-		const venuesWithEvents = incomingData.filter(venue => venue.has_upcoming_events === true);
-		setVenuesData(prev => [...prev, ...venuesWithEvents]);
+		setVenuesData(prev => [...prev, ...incomingData]);
 	},[data])
 
 	useEffect(() => {
