@@ -1,7 +1,7 @@
 # Event-App
 A React Native app designed to allow users to explore live events happening in a city of their choosing 
 
-![Mockup Image](./assets/gifs/readmegifLarge.gif)
+![Mockup Image](./assets/gifs/1-14.gif)
 
 🛑 *This project is a work in progress, but feel free to check out the progress made so far!* 
 
