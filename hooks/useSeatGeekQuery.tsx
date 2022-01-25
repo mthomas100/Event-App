@@ -1,12 +1,16 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
-import { Meta, MetaParams } from "../types/meta";
-import { VenuesData } from "../types/types";
+import { useReduxDispatch, useReduxSelector } from "../redux";
+import { setCityVenues } from "../redux/slices/cityVenues";
+import { MetaParams } from "../types/meta";
+import { Venues } from "../types/venues";
 
 export type useSeatGeekQueryTypes = (
     resource: 'venues' | 'performers' | 'events',
-    params: Object,
+    params: {
+        [key: string]: any;
+    },
     ) => {
     loading: boolean;
     error: AxiosError | null;
@@ -14,6 +18,9 @@ export type useSeatGeekQueryTypes = (
 };
 
 const useSeatGeekQuery : useSeatGeekQueryTypes = (resource, params) => {
+    const dispatch = useReduxDispatch()
+    // const value = useReduxSelector(state => state.)
+
     const [data, setData] = useState<unknown[]>([]);
     const [error, setError] = useState<AxiosError | null>(null);
 	const [loading, setLoading] = useState<boolean>(true);
@@ -53,6 +60,13 @@ const useSeatGeekQuery : useSeatGeekQueryTypes = (resource, params) => {
             const allDataFlattened = allData.reduce((acc, item) => [...acc, ...item.data[resource]], [] as unknown[]);
             // Set the data state
             setData(allDataFlattened);
+
+            // If resource is venues....
+            dispatch(setCityVenues({city : params.city, venues : allDataFlattened as Venues[]}));
+
+            // If resource is events....
+            
+            // If resource is performers....
             } catch (err) {
                 const error = err as AxiosError;
                 setError(error);
@@ -62,6 +76,12 @@ const useSeatGeekQuery : useSeatGeekQueryTypes = (resource, params) => {
         }
         fetchAllData();
     },[params]); // When city changes (which is a param), trigger effect
+
+    // When new data is fetched, add data to redux store
+    useEffect(() => {
+
+    },[]);
+
 
     return {
         loading,

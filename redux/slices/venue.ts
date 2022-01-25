@@ -10,4 +10,4 @@ const venueSlice = createSlice({
 })
 
 export const { setVenue } = venueSlice.actions
-export default venueSlice.reducer // counterReducer
+export default venueSlice.reducer // venueReducer
