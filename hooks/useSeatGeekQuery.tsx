@@ -19,7 +19,9 @@ export type useSeatGeekQueryTypes = (
 
 const useSeatGeekQuery : useSeatGeekQueryTypes = (resource, params) => {
     const dispatch = useReduxDispatch()
-    // const value = useReduxSelector(state => state.)
+    const cityVenues = useReduxSelector(state => state.cityVenues);
+    
+    
 
     const [data, setData] = useState<unknown[]>([]);
     const [error, setError] = useState<AxiosError | null>(null);
@@ -43,6 +45,15 @@ const useSeatGeekQuery : useSeatGeekQueryTypes = (resource, params) => {
     }
 
     useEffect( () => {
+        setLoading(true);
+        const cityFromStore = cityVenues.find(cityVenue => cityVenue.city === params.city);
+        if (cityFromStore) {
+            // IF CITY IS ALREADY IN REDUX STORE, DON'T FETCH AGAIN
+            setData(cityFromStore.venues);
+            setLoading(false);
+            return;
+        } else {
+            // IF CITY IS NOT IN REDUX STORE, FETCH DATA
         let totalPages : number; 
         const fetchAllData = async () => {
             // Get totalpages by first by obtaining meta data value of total results and dividing by results per page (and rounding up)
@@ -75,13 +86,8 @@ const useSeatGeekQuery : useSeatGeekQueryTypes = (resource, params) => {
             }
         }
         fetchAllData();
+    }
     },[params]); // When city changes (which is a param), trigger effect
-
-    // When new data is fetched, add data to redux store
-    useEffect(() => {
-
-    },[]);
-
 
     return {
         loading,

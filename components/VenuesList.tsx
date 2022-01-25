@@ -37,7 +37,6 @@ const VenuesList: React.FC<VenuesListProps> = ({ city, navigation }) => {
 	}), [city]) as VenuesParams;
 	
 	const { loading, error, data } = useSeatGeekQuery('venues', params) as ReturnType<typeof useSeatGeekQuery> & {data: VenuesData[]};
-	console.log('data', data);
 
 	// If new data is detected (i.e. page is incremented or city is changed), append incoming data to venuesData array
 	useEffect(() => {
