@@ -37,11 +37,13 @@ that takes the arguments of resource and params in order to query the API effect
 
 - Combining types for the API and the useSeatGeekQuery which allows for rapid and type safe building of the application while maximizing the potential out of the SeatGeek API.
 
-- Infinite scroll (paginates through query after scrolling to the bottom of venue feed). *See logic for the implementation of this feature [here](https://github.com/mthomas100/Event-App/blob/master/components/VenuesList.tsx)*
+- Persistence of redux store from previous sessions through usage of the [redux-persist](https://github.com/mthomas100/Event-App/blob/master/hooks/useSeatGeekQuery.tsx) library. Implementation can be seen in [redux/index.ts](https://github.com/mthomas100/Event-App/blob/master/redux/index.ts) and [App.tsx](https://github.com/mthomas100/Event-App/blob/master/App.tsx)
+
+- Data request via [useSeatGeekQuery](https://github.com/mthomas100/Event-App/blob/master/hooks/useSeatGeekQuery.tsx) will first check to see if data has been fetched previously (aka: is found in the redux store). If is in the redux store already, the data will not be wastefully fetched again. 
 
 ### Future Features
 
-- I plan to create a page for each venue. When it is clicked on, the user of the application will be able to browse events that are scheduled to happen at that venue. 
+- A page for each venue. When it is clicked on, the user of the application will be able to browse events that are scheduled to happen at that venue. 
 Each event in turn have its own page with information about the entertainer that is to play and a link to buy tickets for that event. 
 
 - More tabs that utilize features of the SeatGeek API in addition to a "Home" tab. 
