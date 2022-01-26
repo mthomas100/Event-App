@@ -39,7 +39,7 @@ that takes the arguments of resource and params in order to query the API effect
 
 - Persistence of redux store from previous sessions through usage of the [redux-persist](https://github.com/mthomas100/Event-App/blob/master/hooks/useSeatGeekQuery.tsx) library. Implementation can be seen in [redux/index.ts](https://github.com/mthomas100/Event-App/blob/master/redux/index.ts) and [App.tsx](https://github.com/mthomas100/Event-App/blob/master/App.tsx)
 
-- Data request via [useSeatGeekQuery](https://github.com/mthomas100/Event-App/blob/master/hooks/useSeatGeekQuery.tsx) will first check to see if data has been fetched previously (aka: is found in the redux store). If is in the redux store already, the data will wastefully fetched again. 
+- Data request via [useSeatGeekQuery](https://github.com/mthomas100/Event-App/blob/master/hooks/useSeatGeekQuery.tsx) will first check to see if data has been fetched previously (aka: is found in the redux store). If is in the redux store already, the data will not be wastefully fetched again. 
 
 ### Future Features
 
