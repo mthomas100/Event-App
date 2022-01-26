@@ -21,8 +21,6 @@ const useSeatGeekQuery : useSeatGeekQueryTypes = (resource, params) => {
     const dispatch = useReduxDispatch()
     const cityVenues = useReduxSelector(state => state.cityVenues);
     
-    
-
     const [data, setData] = useState<unknown[]>([]);
     const [error, setError] = useState<AxiosError | null>(null);
 	const [loading, setLoading] = useState<boolean>(true);
@@ -47,7 +45,7 @@ const useSeatGeekQuery : useSeatGeekQueryTypes = (resource, params) => {
     useEffect( () => {
         setLoading(true);
         const cityFromStore = cityVenues.find(cityVenue => cityVenue.city === params.city);
-        if (cityFromStore) {
+        if (cityFromStore && resource === 'venues') {
             // IF CITY IS ALREADY IN REDUX STORE, DON'T FETCH AGAIN
             setData(cityFromStore.venues);
             setLoading(false);
