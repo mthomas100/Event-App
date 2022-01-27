@@ -1,19 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { State } from 'react-native-gesture-handler'
-import { VenuesData } from '../../types/types'
+import { CityVenues, VenuesData } from '../../types/types'
 import { Venues } from '../../types/venues'
-
-//type for argument setCityVenues(city, venues)
-type CityVenuesState = {
-    city: string,
-    venues: Venues[]
-}
 
 const cityVenues = createSlice({
     name: 'cityVenues',
-    initialState: [] as CityVenuesState[],
+    initialState: [] as CityVenues[],
     reducers: {
-        setCityVenues: (state, action: PayloadAction<CityVenuesState>) => {
+        setCityVenues: (state, action: PayloadAction<CityVenues>) => {
             // If the city already exists, replace the venues, otherwise add the city and venues
             const cityIndex = state.findIndex(cityVenue => cityVenue.city === action.payload.city)
             if (cityIndex !== -1) {

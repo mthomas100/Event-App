@@ -32,12 +32,13 @@ export type RootTabParamList = {
   VenuesTab: undefined;
 };
 
-// VENUES STACK
+// VENUES STACK AKA TabOneNavigator
 
 export type VenuesParamList = {
   Venues : undefined;
   Venue: {
     venueId: number;
+    city: string;
   };
 };
 
@@ -49,3 +50,11 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> = Composit
 //CUSTOM PROP TYPES
 
 export type VenuesData = Venues & {backgroundColor : string};
+
+
+// OTHER
+
+export type CityVenues = {
+  city: string,
+  venues: VenuesData[]
+}

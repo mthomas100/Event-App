@@ -12,6 +12,9 @@ type VenueEventsListProps = {
 }
 
 const VenueEventsList:React.FC<VenueEventsListProps> = ({ venue }) => {
+    console.log('VenueEventsList venue', venue);
+
+
     //TODO:
     //1)  Load more events when scroll to bottom
     //1b) As this pattern has shown up twice now,
@@ -22,27 +25,40 @@ const VenueEventsList:React.FC<VenueEventsListProps> = ({ venue }) => {
     const eventsParams : EventsParams = {
         "venue.id": venue.id,
     };
-    const {data, error, loading } = useSeatGeekQuery('events', eventsParams, []) as ReturnType<typeof useSeatGeekQuery> & {data: Events[]};
-    if (loading) return <Loading />;
-    if (error) return <Error error={error} />
+    // const {data, error, loading } = useSeatGeekQuery('events', eventsParams, []) as ReturnType<typeof useSeatGeekQuery> & {data: Events[]};
+    // if (loading) return <Loading />;
+    // if (error) return <Error message={error.message} />
 
     return (
-        <FlatList
-            data={data}
-            keyExtractor={(item) => item.id.toString()}
-            // onEndReached={() => setPage(page + 1)}
-            // onEndReachedThreshold={0.5}
-            renderItem={({ item : event }) => (
-                <ScrollView>
-                <TouchableOpacity 
-                // onPress={() => handleVenuePress(venue)}
-                >
-                    <VenueEvent event={event} />      
-                </TouchableOpacity>
-                </ScrollView>
-            )}
-		/>
+        // <FlatList
+        //     data={data}
+        //     keyExtractor={(item) => item.id.toString()}
+        //     // onEndReached={() => setPage(page + 1)}
+        //     // onEndReachedThreshold={0.5}
+        //     renderItem={({ item : event }) => (
+        //         <ScrollView>
+        //         <TouchableOpacity 
+        //         // onPress={() => handleVenuePress(venue)}
+        //         >
+        //             <VenueEvent event={event} />      
+        //         </TouchableOpacity>
+        //         </ScrollView>
+        //     )}
+		// />
+        <View style={styles.container}>
+            <Text>VENUE EVENT LIST HERE</Text>
+        </View>
     )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        width: '100%',
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+    }
+})
 
 export default VenueEventsList

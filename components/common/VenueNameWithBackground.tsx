@@ -1,8 +1,9 @@
 import React from 'react'
 import {  StyleSheet, Text, View } from 'react-native'
 import { VenuesData } from '../../types/types'
+import { Venues } from '../../types/venues'
 
-const VenueNameWithBackground = ({ venue } : { venue: VenuesData}) => {
+const VenueNameWithBackground:React.FC<{venue: Venues}> = ({ venue }) => {
     return (
         <View style={[styles.venueContainer, {backgroundColor: venue.backgroundColor}]}>
 				<View style={[styles.venueImageOverlay]}>

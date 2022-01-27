@@ -4,15 +4,15 @@ import { View, Text, StyleSheet } from 'react-native'
 import tw from 'twrnc'
 
 type ErrorProps = {
-    error: AxiosError;
+    message: AxiosError['message'];
 }
 
-const Error: React.FC <ErrorProps> = ({error}) => {
-    console.log('Error', error.message);
+const Error: React.FC <ErrorProps> = ({message}) => {
+    console.log('Error', message);
     return (
 		<View style={styles.container}>
             <Text style={[styles.textStyles, tw`font-bold`]}>Error</Text>
-			<Text style={styles.textStyles}>{error.message}</Text>
+			<Text style={styles.textStyles}>{message}</Text>
 		</View>
     )
 }
