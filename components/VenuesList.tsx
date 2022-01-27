@@ -28,14 +28,12 @@ const VenuesList: React.FC<VenuesListProps> = ({ city, navigation }) => {
 		city,
 	}), [city]) as VenuesParams;
 	
+	
 	const { loading, error, venuesData } = useSeatGeekQuery('venues', params);
 
-	console.log('VENUESLIST venuesData', venuesData);
-
-	if (error) {
-		if (loading) return <Loading />;
-		if (error) return <Error message={error.message} />;
-	}
+	if (loading) return <Loading />;
+	if (error) return <Error message={error.message} />;
+	
 	return (
 		<FlatList
 			data={venuesData?.venues}

@@ -5,7 +5,6 @@ import { useReduxDispatch, useReduxSelector } from "../redux";
 import { setCityVenues } from "../redux/slices/cityVenues";
 import { MetaParams } from "../types/meta";
 import { CityVenues, VenuesData } from "../types/types";
-import { Venues } from "../types/venues";
 import { getRandomColor } from "../utils/getRandomColor";
 
 export type useSeatGeekQueryTypes = (
@@ -17,6 +16,7 @@ export type useSeatGeekQueryTypes = (
     loading: boolean;
     error: AxiosError | null;
     venuesData?: CityVenues;
+    dataIsInStore: boolean;
 };
 
 //TODO: If a day has passed between the last time the user visited the app and the current day,
@@ -29,11 +29,13 @@ export type useSeatGeekQueryTypes = (
 const useSeatGeekQuery : useSeatGeekQueryTypes = (resource, params) => {
     const dispatch = useReduxDispatch()
     const allReduxCityVenues = useReduxSelector(state => state.cityVenues);
-    const cityVenuesRedux = allReduxCityVenues.find(cityVenue => cityVenue.city === params.city);
+    const cityVenuesFromRedux = allReduxCityVenues.find(cityVenue => cityVenue.city === params.city);
+    const [dataIsInStore, setDataIsInStore] = useState(false);
     
     const [venuesData, setVenuesData ] = useState<CityVenues>({} as CityVenues);
     const [error, setError] = useState<AxiosError | null>(null);
 	const [loading, setLoading] = useState<boolean>(true);
+    
 
     const endPointUrl = 'https://api.seatgeek.com/2';
     const authParams = {
@@ -53,20 +55,17 @@ const useSeatGeekQuery : useSeatGeekQueryTypes = (resource, params) => {
     }
 
     useEffect( () => {
-        setLoading(true);
-        if (cityVenuesRedux) {
-            // IF CITY IS ALREADY IN REDUX STORE, DON'T FETCH AGAIN
-            setVenuesData(cityVenuesRedux);
-            setLoading(false);
-            return;
-        } else {
-            // IF CITY IS NOT IN REDUX STORE, FETCH DATA
         let totalPages : number; 
-        const fetchAllData = async () => {
-            // Get totalpages by first by obtaining meta data value of total results and dividing by results per page (and rounding up)
+        const fetchAllData = async () => {               
             try {
+            if (cityVenuesFromRedux) {
+            // IF DATA IS IN REDUX STORE, DO NOT FETCH AGAIN + SET DATA STATE TODO: Conditionally take into account resource type
+                setVenuesData(cityVenuesFromRedux);
+            } else {
+            // IF DATA IS NOT IN REDUX STORE, FETCH IT + SET DATA TO REDUX STORE + SET DATA STATE
             const res = await fetchData()
             .then (res => {
+                // Get totalpages by first by obtaining meta data value of total results and dividing by results per page (and rounding up)
                 const totalResults = res.data.meta.total;
                 totalPages = Math.ceil(totalResults / res.data.meta.per_page);
             });
@@ -85,17 +84,15 @@ const useSeatGeekQuery : useSeatGeekQueryTypes = (resource, params) => {
                         backgroundColor: getRandomColor(0.5)
                     }
                 })
-                dispatch(setCityVenues({city : params.city, venues : cityVenuesWithBackground as VenuesData[]}));
-                console.log('useSeatGeekQuery USEEFFECT cityVenuesRedux', cityVenuesRedux);
-                if (cityVenuesRedux) return setVenuesData(cityVenuesRedux);
-                throw new Error('No cityVenuesRedux');
+                const newCityVenues = {city : params.city, venues : cityVenuesWithBackground as VenuesData[]};
+                setVenuesData(newCityVenues);
+                dispatch(setCityVenues(newCityVenues));
+            } else {
+                throw new Error('Resource not supported');
             }
             // If resource is events....
-            
             // If resource is performers....
-
-            
-            
+            }
             } catch (err) {
                 console.error(err);
                 const error = err as AxiosError;
@@ -105,13 +102,13 @@ const useSeatGeekQuery : useSeatGeekQueryTypes = (resource, params) => {
             }
         }
         fetchAllData();
-    }
     },[params]); // When city changes (which is a param), trigger effect
 
     return {
         loading,
         error,
-        venuesData
+        venuesData,
+        dataIsInStore
     }
 }
 
