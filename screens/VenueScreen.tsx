@@ -17,18 +17,18 @@ type VenueScreenProps = {
 
 const VenueScreen: React.FC<VenueScreenProps> = ({ route }) => {
     const {venueId, city} = route.params;
-    const cityVenues = useReduxSelector(state => state.cityVenues);
+    const allCityVenues = useReduxSelector(state => state.cityVenues);
 
-    // Get the venue object from the cityVenues object (from the redux store)
-    const cityVenue = cityVenues.find(cityVenue => cityVenue.city === city);
+    const cityVenue = allCityVenues.find(cityVenue => cityVenue.city === city);
     const venue = cityVenue?.venues.find(venue => venue.id === venueId);
+
 
     if (!venue) return <Error message='No venue found'/>
     
     return (
         <SafeAreaView style={styles.container}>
             <VenueNameWithBackground venue={venue} />
-            {/* <VenueEventsList venue={venue} /> */}
+            <VenueEventsList venue={venue} />
         </SafeAreaView>
     )
 }

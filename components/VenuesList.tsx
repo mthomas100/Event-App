@@ -6,6 +6,7 @@ import Error from './Error';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import VenueNameWithBackground from './common/VenueNameWithBackground';
 import { useMemo } from 'react';
+import { VenuesData, VenuesParamList } from '../types/types';
 
 type VenuesListProps = {
 	city : string;

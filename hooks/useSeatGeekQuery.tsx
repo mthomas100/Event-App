@@ -3,20 +3,22 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useReduxDispatch, useReduxSelector } from "../redux";
 import { setCityVenues } from "../redux/slices/cityVenues";
+import { setVenueEvents } from "../redux/slices/venueEvents";
+import { Events } from "../types/events";
 import { MetaParams } from "../types/meta";
-import { CityVenues, VenuesData } from "../types/types";
+import { CityVenues, VenueEvents, VenuesData } from "../types/types";
 import { getRandomColor } from "../utils/getRandomColor";
 
 export type useSeatGeekQueryTypes = (
     resource: 'venues' | 'performers' | 'events',
     params: {
         [key: string]: any;
-    },
+    }
     ) => {
     loading: boolean;
     error: AxiosError | null;
     venuesData?: CityVenues;
-    dataIsInStore: boolean;
+    eventsData?: VenueEvents;
 };
 
 //TODO: If a day has passed between the last time the user visited the app and the current day,
@@ -28,11 +30,19 @@ export type useSeatGeekQueryTypes = (
 
 const useSeatGeekQuery : useSeatGeekQueryTypes = (resource, params) => {
     const dispatch = useReduxDispatch()
+
+    // Check to see if cityVenues data is in redux store
     const allReduxCityVenues = useReduxSelector(state => state.cityVenues);
     const cityVenuesFromRedux = allReduxCityVenues.find(cityVenue => cityVenue.city === params.city);
-    const [dataIsInStore, setDataIsInStore] = useState(false);
+
+    // Check to see if venueEvents data is in redux store
+    const allReduxVenueEvents = useReduxSelector(state => state.venueEvents);
+    const venueEventsFromRedux = allReduxVenueEvents.find(venueEvent => venueEvent.venueId === params['venue.id']);
+
+    
     
     const [venuesData, setVenuesData ] = useState<CityVenues>({} as CityVenues);
+    const [eventsData, setEventsData] = useState<VenueEvents>({} as VenueEvents);
     const [error, setError] = useState<AxiosError | null>(null);
 	const [loading, setLoading] = useState<boolean>(true);
     
@@ -56,42 +66,72 @@ const useSeatGeekQuery : useSeatGeekQueryTypes = (resource, params) => {
 
     useEffect( () => {
         let totalPages : number; 
-        const fetchAllData = async () => {               
-            try {
-            if (cityVenuesFromRedux) {
-            // IF DATA IS IN REDUX STORE, DO NOT FETCH AGAIN + SET DATA STATE TODO: Conditionally take into account resource type
-                setVenuesData(cityVenuesFromRedux);
-            } else {
-            // IF DATA IS NOT IN REDUX STORE, FETCH IT + SET DATA TO REDUX STORE + SET DATA STATE
-            const res = await fetchData()
-            .then (res => {
-                // Get totalpages by first by obtaining meta data value of total results and dividing by results per page (and rounding up)
-                const totalResults = res.data.meta.total;
-                totalPages = Math.ceil(totalResults / res.data.meta.per_page);
-            });
-            // Get data for all pages and combine into one array
-            const allData = await Promise.all(
-                Array.from({ length: totalPages }, (_, i) => fetchData({ page: i + 1 }))
-            );
-            // Get the resource data from each page and combine into one array
-            const allDataFlattened = allData.reduce((acc, item) => [...acc, ...item.data[resource]], [] as any[]);
+        const fetchAllData = async () => {
+            let skipFetch = false;
 
-            // If resource is venues....
-            if (resource === 'venues') {
-                const cityVenuesWithBackground = allDataFlattened.map((venue : VenuesData) => {
-                    return {
-                        ...venue,
-                        backgroundColor: getRandomColor(0.5)
+            // DETERMINE IF DATA IS IN REDUX STORE. IF IT IS, SET skipFetch TO TRUE
+            switch (resource) {
+                case 'venues':
+                    if (cityVenuesFromRedux) {
+                        setVenuesData(cityVenuesFromRedux);
+                        skipFetch = true;
                     }
-                })
-                const newCityVenues = {city : params.city, venues : cityVenuesWithBackground as VenuesData[]};
-                setVenuesData(newCityVenues);
-                dispatch(setCityVenues(newCityVenues));
-            } else {
-                throw new Error('Resource not supported');
-            }
-            // If resource is events....
-            // If resource is performers....
+                    break;
+                case 'performers':
+                    break;
+                case 'events':
+                    if (venueEventsFromRedux) {
+                        setEventsData(venueEventsFromRedux);
+                        skipFetch = true;
+                    }
+                    break;
+                default:
+                    throw new Error('Invalid resource');
+            } 
+
+            try {
+                if (skipFetch) {
+                // IF DATA IS IN REDUX STORE, DON'T FETCH DATA
+                    console.log('skipping fetch', resource);
+                    return
+                } else {
+                // IF DATA IS NOT IN REDUX STORE, FETCH IT + SET DATA TO REDUX STORE + SET DATA STATE
+                const res = await fetchData()
+                .then (res => {
+                    // Get totalpages by first by obtaining meta data value of total results and dividing by results per page (and rounding up)
+                    const totalResults = res.data.meta.total;
+                    totalPages = Math.ceil(totalResults / res.data.meta.per_page);
+                });
+                // Get data for all pages and combine into one array
+                const allData = await Promise.all(
+                    Array.from({ length: totalPages }, (_, i) => fetchData({ page: i + 1 }))
+                );
+                // Get the resource data from each page and combine into one array
+                const allDataFlattened = allData.reduce((acc, item) => [...acc, ...item.data[resource]], [] as any[]);
+
+                // handle data according to resource type
+                switch (resource) {
+                    case 'venues':
+                        const cityVenuesWithBackground = allDataFlattened.map((venue : VenuesData) => {
+                            return {
+                                ...venue,
+                                backgroundColor: getRandomColor(0.5)
+                            }
+                        })
+                        const newCityVenues = {city : params.city, venues : cityVenuesWithBackground as VenuesData[]};
+                        setVenuesData(newCityVenues);
+                        dispatch(setCityVenues(newCityVenues));
+                        break;
+                    // case 'performers':
+                    //     break; 
+                    case 'events':
+                        const newVenueEvents = {venueId: params["venue.id"], events: allDataFlattened as Events[]};
+                        setEventsData(newVenueEvents);
+                        dispatch(setVenueEvents(newVenueEvents));
+                        break;
+                    default:
+                        throw new Error('Invalid resource type');
+                }
             }
             } catch (err) {
                 console.error(err);
@@ -108,7 +148,7 @@ const useSeatGeekQuery : useSeatGeekQueryTypes = (resource, params) => {
         loading,
         error,
         venuesData,
-        dataIsInStore
+        eventsData
     }
 }
 

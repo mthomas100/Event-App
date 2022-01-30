@@ -6,6 +6,7 @@
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Events } from './events';
 import { Venues } from './venues';
 
 declare global {
@@ -57,4 +58,9 @@ export type VenuesData = Venues & {backgroundColor : string};
 export type CityVenues = {
   city: string,
   venues: VenuesData[]
+}
+
+export type VenueEvents = {
+  venueId: number,
+  events: Events[]
 }
